@@ -1,0 +1,42 @@
+0, 0, 7, 229, Leftmost Wall Part 1
+0, 267, 7, 245, Leftmost Wall Part 2
+441, 0, 7, 229, Rightmost Wall Part 1
+441, 267, 7, 245, Rightmost Wall Part 2
+0, 0, 448, 23, Topmost Wall
+0, 505, 448, 7, Bottommost Wall
+0000000000, 0000000000, 0000000000, 0000000000
+218, 23, 12, 62, Topmost-Center Protruding Wall
+44, 59, 41, 26, Topmost-Leftmost Block
+124, 59, 57, 26, Topmost-Left Block
+268, 59, 57, 26, Topmost-Right Block
+364, 59, 41, 26, Topmost-Rightmost Block
+0000000000, 0000000000, 0000000000, 0000000000
+44, 123, 41, 10, Top-Leftmost Block
+124, 123, 9, 106, Top-Left T Part 1
+133, 171, 48, 10, Top-Left T Part 2
+172, 123, 105, 10, Top-Center T Part 1
+220, 133, 9, 48, Top-Center T Part 2
+316, 123, 9, 106, Top-Right T Part 1
+268, 171, 48, 10, Top-Right T Part 2
+364, 123, 41, 10, Top-Rightmost Block
+0000000000, 0000000000, 0000000000, 0000000000
+7, 171, 78, 58, Top-Left Attached-Block
+363, 171, 78, 58, Top-Right Attached-Block
+0000000000, 0000000000, 0000000000, 0000000000
+172, 219, 105, 58, Center Ghost Block
+0000000000, 0000000000, 0000000000, 0000000000
+7, 267, 78, 58, Bottom-Left Attached-Block
+124, 267, 9, 58, Bottom-Left Vertical Block
+316, 267, 9, 58, Bottom-Right Vertical Block
+363, 267, 78, 58, Bottom-Right Attached-Block
+0000000000, 0000000000, 0000000000, 0000000000
+172, 315, 105, 10, Bottom-Center T Part 1
+220, 325, 9, 48, Bottom-Center T Part 2
+0000000000, 0000000000, 0000000000, 0000000000
+44, 363, 41, 10, Bottom-Left L Part 1
+76, 373, 9, 48, Bottom-Left L Part 2
+124, 363, 57, 10, Bottom-Left Horizontal Block
+268, 363, 57, 10, Bottom-Right Horizontal Block
+364, 363, 41, 10, Bottom-Right L Part 1
+364, 373, 9, 48, Bottom-Right L Part 2
+0000000000, 0000000000, 0000000000, 0000000000
