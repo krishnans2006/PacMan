@@ -77,9 +77,9 @@ def redraw(win, dots, pacman, ghosts, cherry_disp):
 def main():
     pacman = PacMan(*pacman_pos[:2], 32)
     ghosts = {
-        "pinky": Pinky(176, 223, 24),
+        "blinky": Blinky(176, 247, 24),
         "inky": Inky(200, 247, 24),
-        "blinky": Blinky(224, 223, 24),
+        "pinky": Pinky(224, 247, 24),
         "clyde": Clyde(248, 247, 24)
     }
     while True:
@@ -103,20 +103,8 @@ def main():
             pacman.move("up", walls)
         if keys[pygame.K_DOWN]:
             pacman.move("down", walls)
-        # pygame.event.pump()
-            # if event.type == pygame.KEYDOWN:
-            #     if event.key == pygame.K_LEFT:
-            #         pacman.move("left", walls)
-            #     if event.key == pygame.K_RIGHT:
-            #         pacman.move("right", walls)
-            #     if event.key == pygame.K_UP:
-            #         pacman.move("up", walls)
-            #     if event.key == pygame.K_DOWN:
-            #         pacman.move("down", walls)
-            # if event.type == pygame.KEYUP and event.key in [pygame.K_LEFT, pygame.K_RIGHT]:
-            #     pacman.move("stopx", walls)
-            # if event.type == pygame.KEYUP and event.key in [pygame.K_UP, pygame.K_DOWN]:
-            #     pacman.move("stopy", walls)
+        for ghost in ghosts.values():
+            ghost.move()
         redraw(win, dots, pacman, ghosts, cherry_disp)
         clock.tick(30)
 

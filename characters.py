@@ -22,7 +22,7 @@ class PacMan:
         self.imgcnt = 0
         self.count = 0
         self.count_increment = 1
-        self.dirchange = 3
+        self.dirchange = 2
         self.dirx = 0
         self.diry = 0
         self.sep = 3
@@ -108,6 +108,12 @@ class PacMan:
 
 class Ghost():
     imgs = [pygame.image.load("ghost.png")]
+    boundaries = {
+        "left": 176,
+        "right": 272,
+        "up": 223,
+        "down": 271,
+    }
 
     def __init__(self, x, y, width):
         self.x = x
@@ -119,17 +125,34 @@ class Ghost():
         self.rect = pygame.Rect(self.x - self.width / 2, self.y - self.width / 2, self.width, self.width)
         self.dirx = 0
         self.diry = 0
+        self.wait_time = 20
         self.start_time = datetime.now()
+        self.use_super = True
 
     def move(self):
-        if (datetime.now() - self.start_time).seconds < 5:
-            return False
         self.get_dirns()
         self.x += self.dirx
         self.y += self.diry
+        self.rect = pygame.Rect(self.x - self.width / 2, self.y - self.width / 2, self.width, self.width)
 
     def get_dirns(self):
-        pass
+        if self.x < self.boundaries["left"]:
+            self.dirx = 0
+            self.diry = -1
+        if self.x + self.width > self.boundaries["right"]:
+            self.dirx = 0
+            self.diry = 1
+        if self.y < self.boundaries["up"]:
+            self.dirx = 1
+            self.diry = 0
+        if self.y + self.width > self.boundaries["down"]:
+            self.dirx = -1
+            self.diry = 0
+        if self.rect.collidepoint(223, 223) and (datetime.now() - self.start_time).seconds > 0.5:
+            self.dirx = 0
+            self.diry = -1
+            return False
+        return True
 
     def draw(self, win):
         win.blit(self.img, (self.x, self.y))
@@ -142,9 +165,11 @@ class Blinky(Ghost):
     def __init__(self, x, y, width):
         super().__init__(x, y, width)
         self.img = self.imgs[1]
+        self.dirx = -1
 
     def get_dirns(self):
-        pass
+        if self.use_super:
+            self.use_super = super().get_dirns()
 
 
 class Pinky(Ghost):
@@ -154,9 +179,11 @@ class Pinky(Ghost):
     def __init__(self, x, y, width):
         super().__init__(x, y, width)
         self.img = self.imgs[1]
+        self.dirx = -1
 
     def get_dirns(self):
-        pass
+        if self.use_super:
+            self.use_super = super().get_dirns()
 
 
 class Inky(Ghost):
@@ -166,9 +193,11 @@ class Inky(Ghost):
     def __init__(self, x, y, width):
         super().__init__(x, y, width)
         self.img = self.imgs[1]
+        self.dirx = -1
 
     def get_dirns(self):
-        pass
+        if self.use_super:
+            self.use_super = super().get_dirns()
 
 
 class Clyde(Ghost):
@@ -178,6 +207,8 @@ class Clyde(Ghost):
     def __init__(self, x, y, width):
         super().__init__(x, y, width)
         self.img = self.imgs[1]
+        self.dirx = -1
 
     def get_dirns(self):
-        pass
+        if self.use_super:
+            self.use_super = super().get_dirns()
