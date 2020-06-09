@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pygame
 
 
@@ -111,28 +113,61 @@ class Ghost():
         self.x = x
         self.y = y
         self.width = width
+        self.img = self.imgs[0]
         self.rect = pygame.Rect(self.x - self.width / 2, self.y - self.width / 2, self.width, self.width)
+        self.dirx = 0
+        self.diry = 0
+        self.start_time = datetime.now()
+
+    def move(self):
+        if (datetime.now() - self.start_time).seconds < 5:
+            return False
+        self.get_dirns()
+        self.x += self.dirx
+        self.y += self.diry
+
+    def get_dirns(self):
+        pass
+
+    def draw(self, win):
+        win.blit(self.img, (self.x, self.y))
 
 
 class Blinky(Ghost):
     def __init__(self, x, y, width):
         super().__init__(x, y, width)
         self.imgs.append(pygame.image.load("blinky.png"))
+        self.img = self.imgs[1]
+
+    def get_dirns(self):
+        pass
 
 
 class Pinky(Ghost):
     def __init__(self, x, y, width):
         super().__init__(x, y, width)
         self.imgs.append(pygame.image.load("pinky.png"))
+        self.img = self.imgs[1]
+
+    def get_dirns(self):
+        pass
 
 
 class Inky(Ghost):
     def __init__(self, x, y, width):
         super().__init__(x, y, width)
         self.imgs.append(pygame.image.load("inky.png"))
+        self.img = self.imgs[1]
+
+    def get_dirns(self):
+        pass
 
 
 class Clyde(Ghost):
     def __init__(self, x, y, width):
         super().__init__(x, y, width)
         self.imgs.append(pygame.image.load("clyde.png"))
+        self.img = self.imgs[1]
+
+    def get_dirns(self):
+        pass
