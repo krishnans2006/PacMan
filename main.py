@@ -2,7 +2,7 @@ import random
 
 import pygame
 
-from characters import PacMan
+from characters import PacMan, Blinky, Pinky, Inky, Clyde
 
 pygame.init()
 pygame.font.init()
@@ -61,11 +61,13 @@ def check_dot_values(dots):
     return True
 
 
-def redraw(win, dots, pacman, cherry_disp):
+def redraw(win, dots, pacman, ghosts, cherry_disp):
     win.blit(BG, (0, 0))
     for dot in dots:
         if dot[2]:
             pygame.draw.circle(win, (255, 255, 255), dot[:2], 4)
+    for ghost in ghosts.values():
+        ghost.draw(win)
     if cherry_disp:
         win.blit(CHERRY, (cherry_pos[0] - 12, cherry_pos[1] - 12))
     pacman.draw(win)
@@ -74,6 +76,12 @@ def redraw(win, dots, pacman, cherry_disp):
 
 def main():
     pacman = PacMan(*pacman_pos[:2], 32)
+    ghosts = {
+        "pinky": Pinky(176, 223, 24),
+        "inky": Inky(200, 247, 24),
+        "blinky": Blinky(224, 223, 24),
+        "clyde": Clyde(248, 247, 24)
+    }
     while True:
         cherry_disp = check_dot_values(dots)
         collide_dot = pacman.update(W, H, [cherry_pos], walls) if cherry_disp else pacman.update(W, H, dots, walls)
@@ -109,7 +117,7 @@ def main():
             #     pacman.move("stopx", walls)
             # if event.type == pygame.KEYUP and event.key in [pygame.K_UP, pygame.K_DOWN]:
             #     pacman.move("stopy", walls)
-        redraw(win, dots, pacman, cherry_disp)
+        redraw(win, dots, pacman, ghosts, cherry_disp)
         clock.tick(30)
 
 

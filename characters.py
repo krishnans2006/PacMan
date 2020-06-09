@@ -113,6 +113,8 @@ class Ghost():
         self.x = x
         self.y = y
         self.width = width
+        for x, img in enumerate(self.imgs):
+            self.imgs[x] = pygame.transform.scale(img, (self.width, self.width))
         self.img = self.imgs[0]
         self.rect = pygame.Rect(self.x - self.width / 2, self.y - self.width / 2, self.width, self.width)
         self.dirx = 0
@@ -134,9 +136,11 @@ class Ghost():
 
 
 class Blinky(Ghost):
+    imgs = [pygame.image.load("ghost.png"),
+            pygame.image.load("blinky.png")]
+
     def __init__(self, x, y, width):
         super().__init__(x, y, width)
-        self.imgs.append(pygame.image.load("blinky.png"))
         self.img = self.imgs[1]
 
     def get_dirns(self):
@@ -144,9 +148,11 @@ class Blinky(Ghost):
 
 
 class Pinky(Ghost):
+    imgs = [pygame.image.load("ghost.png"),
+            pygame.image.load("pinky.png")]
+
     def __init__(self, x, y, width):
         super().__init__(x, y, width)
-        self.imgs.append(pygame.image.load("pinky.png"))
         self.img = self.imgs[1]
 
     def get_dirns(self):
@@ -154,9 +160,11 @@ class Pinky(Ghost):
 
 
 class Inky(Ghost):
+    imgs = [pygame.image.load("ghost.png"),
+            pygame.image.load("inky.png")]
+
     def __init__(self, x, y, width):
         super().__init__(x, y, width)
-        self.imgs.append(pygame.image.load("inky.png"))
         self.img = self.imgs[1]
 
     def get_dirns(self):
@@ -164,9 +172,11 @@ class Inky(Ghost):
 
 
 class Clyde(Ghost):
+    imgs = [pygame.image.load("ghost.png"),
+            pygame.image.load("clyde.png")]
+
     def __init__(self, x, y, width):
         super().__init__(x, y, width)
-        self.imgs.append(pygame.image.load("clyde.png"))
         self.img = self.imgs[1]
 
     def get_dirns(self):
