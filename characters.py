@@ -77,7 +77,10 @@ class PacMan:
     def update_movement(self, W, H, walls):
         self.count += 1
         if self.count % self.count_increment == 0:
-            if (self.dirx < 0 and self.check_move("left", walls)) or (self.dirx > 0 and self.check_move("right", walls)) or (self.diry < 0 and self.check_move("up", walls)) or (self.diry > 0 and self.check_move("down", walls)):
+            if (self.dirx < 0 and self.check_move("left", walls)) or (
+                    self.dirx > 0 and self.check_move("right", walls)) or (
+                    self.diry < 0 and self.check_move("up", walls)) or (
+                    self.diry > 0 and self.check_move("down", walls)):
                 self.x += self.dirx
                 self.y += self.diry
         if self.x > W:
@@ -99,3 +102,37 @@ class PacMan:
             if self.rect.colliderect(dot_rect):
                 return dot
         return None
+
+
+class Ghost():
+    imgs = [pygame.image.load("ghost.png")]
+
+    def __init__(self, x, y, width):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.rect = pygame.Rect(self.x - self.width / 2, self.y - self.width / 2, self.width, self.width)
+
+
+class Blinky(Ghost):
+    def __init__(self, x, y, width):
+        super().__init__(x, y, width)
+        self.imgs.append(pygame.image.load("blinky.png"))
+
+
+class Pinky(Ghost):
+    def __init__(self, x, y, width):
+        super().__init__(x, y, width)
+        self.imgs.append(pygame.image.load("pinky.png"))
+
+
+class Inky(Ghost):
+    def __init__(self, x, y, width):
+        super().__init__(x, y, width)
+        self.imgs.append(pygame.image.load("inky.png"))
+
+
+class Clyde(Ghost):
+    def __init__(self, x, y, width):
+        super().__init__(x, y, width)
+        self.imgs.append(pygame.image.load("clyde.png"))

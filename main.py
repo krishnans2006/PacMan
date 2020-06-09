@@ -1,6 +1,7 @@
 import random
 
 import pygame
+
 from characters import PacMan
 
 pygame.init()
@@ -62,8 +63,6 @@ def check_dot_values(dots):
 
 def redraw(win, dots, pacman, cherry_disp):
     win.blit(BG, (0, 0))
-    for wall in walls:
-        pygame.draw.rect(win, (255, 0, 0), wall)
     for dot in dots:
         if dot[2]:
             pygame.draw.circle(win, (255, 255, 255), dot[:2], 4)
