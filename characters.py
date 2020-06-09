@@ -5,13 +5,17 @@ class PacMan:
     pacman1 = pygame.transform.scale(pygame.image.load("pacman1.png"), (24, 24))
     pacman2 = pygame.transform.scale(pygame.image.load("pacman2.png"), (24, 24))
     pacman3 = pygame.transform.scale(pygame.image.load("pacman3.png"), (24, 24))
-    imgs = [pacman1, pacman2, pacman3, pacman2]
+    imgs_left = [pacman1, pacman2, pacman3, pacman2]
+    imgs_right = [pygame.transform.rotate(img, 180) for img in imgs_left]
+    imgs_up = [pygame.transform.rotate(img, 270) for img in imgs_left]
+    imgs_down = [pygame.transform.rotate(img, 90) for img in imgs_left]
 
     def __init__(self, x, y, width):
         self.x = x
         self.y = y
         self.width = width
         self.rect = pygame.Rect(self.x - self.width / 2, self.y - self.width / 2, self.width, self.width)
+        self.imgs = self.imgs_right
         self.img = self.imgs[0]
         self.imgcnt = 0
         self.count = 0
@@ -26,15 +30,19 @@ class PacMan:
             if dirn == "left":
                 self.dirx = - self.dirchange
                 self.diry = 0
+                self.imgs = self.imgs_left
             elif dirn == "right":
                 self.dirx = self.dirchange
                 self.diry = 0
+                self.imgs = self.imgs_right
             elif dirn == "up":
                 self.dirx = 0
                 self.diry = - self.dirchange
+                self.imgs = self.imgs_up
             elif dirn == "down":
                 self.dirx = 0
                 self.diry = self.dirchange
+                self.imgs = self.imgs_down
             else:
                 self.dirx = 0
                 self.diry = 0
