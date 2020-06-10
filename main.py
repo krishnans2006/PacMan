@@ -2,7 +2,7 @@ import random
 
 import pygame
 
-from characters import PacMan, Blinky, Pinky, Inky, Clyde
+from classes import PacMan, Blinky, Pinky, Inky, Clyde
 
 pygame.init()
 pygame.font.init()
