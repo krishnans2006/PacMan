@@ -3,6 +3,23 @@ from datetime import datetime
 import pygame
 
 
+class Rectangle:
+    def __init__(self, x, y, width, is_moveable, has_dot, is_powerpellet):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.is_moveable = is_moveable
+        self.eaten = not has_dot
+        self.is_powerpellet = is_powerpellet
+        self.dot_width = 4 if self.is_powerpellet else 2
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.width)
+
+    def draw(self, win):
+        if not self.eaten:
+            pygame.draw.circle(win, (255, 255, 255), (self.x + self.width // 2, self.y + self.width // 2),
+                               self.dot_width)
+
+
 class PacMan:
     pacman1 = pygame.transform.scale(pygame.image.load("pacman1.png"), (24, 24))
     pacman2 = pygame.transform.scale(pygame.image.load("pacman2.png"), (24, 24))
@@ -12,11 +29,10 @@ class PacMan:
     imgs_up = [pygame.transform.rotate(img, 270) for img in imgs_left]
     imgs_down = [pygame.transform.rotate(img, 90) for img in imgs_left]
 
-    def __init__(self, x, y, width):
+    def __init__(self, x, y, rects):
         self.x = x
         self.y = y
-        self.width = width
-        self.rect = pygame.Rect(self.x - self.width / 2, self.y - self.width / 2, self.width, self.width)
+        self.rect = pygame.Rect(self.x - 12, self.y - 12, 24, 24)
         self.imgs = self.imgs_right
         self.img = self.imgs[0]
         self.imgcnt = 0
@@ -25,7 +41,8 @@ class PacMan:
         self.dirchange = 2
         self.dirx = 0
         self.diry = 0
-        self.sep = 3
+        self.sep = 9
+        self.current_rect = self.collide(rects)
 
     def move(self, dirn, walls):
         if self.check_move(dirn, walls):
@@ -51,13 +68,13 @@ class PacMan:
 
     def check_move(self, dirn, walls):
         if dirn == "left":
-            rect = pygame.Rect(self.x - self.width / 2 - self.sep, self.y - self.width / 2, self.width, self.width)
+            rect = pygame.Rect(self.x - 12 - self.sep, self.y - 12, 24, 24)
         elif dirn == "right":
-            rect = pygame.Rect(self.x - self.width / 2 + self.sep, self.y - self.width / 2, self.width, self.width)
+            rect = pygame.Rect(self.x - 12 + self.sep, self.y - 12, 24, 24)
         elif dirn == "up":
-            rect = pygame.Rect(self.x - self.width / 2, self.y - self.width / 2 - self.sep, self.width, self.width)
+            rect = pygame.Rect(self.x - 12, self.y - 12 - self.sep, 24, 24)
         elif dirn == "down":
-            rect = pygame.Rect(self.x - self.width / 2, self.y - self.width / 2 + self.sep, self.width, self.width)
+            rect = pygame.Rect(self.x - 12, self.y - 12 + self.sep, 24, 24)
         else:
             return True
         for wall in walls:
@@ -65,10 +82,10 @@ class PacMan:
                 return False
         return True
 
-    def update(self, W, H, dots, walls):
+    def update(self, W, H, rects, walls):
         self.update_movement(W, H, walls)
         self.update_imgs()
-        return self.collide(dots)
+        return self.collide(rects)
 
     def update_imgs(self):
         self.imgcnt += 1
@@ -93,16 +110,17 @@ class PacMan:
             self.y = 0
         if self.y < 0:
             self.y = H
-        self.rect = pygame.Rect(self.x - self.width / 2, self.y - self.width / 2, self.width, self.width)
+        self.rect = pygame.Rect(self.x - 12, self.y - 12, 24, 24)
 
     def draw(self, win):
         win.blit(self.img, (self.x - 12, self.y - 12))
 
-    def collide(self, dots):
-        for dot in dots:
-            dot_rect = pygame.Rect(dot[0] - 4, dot[1] - 4, 8, 8)
-            if self.rect.colliderect(dot_rect):
-                return dot
+    def collide(self, rects):
+        for rect_list in rects:
+            for rect in rect_list:
+                if rect.rect.collidepoint((self.x, self.y)):
+                    self.current_rect = rect
+                    return rect
         return None
 
 
@@ -122,7 +140,7 @@ class Ghost():
         for x, img in enumerate(self.imgs):
             self.imgs[x] = pygame.transform.scale(img, (self.width, self.width))
         self.img = self.imgs[0]
-        self.rect = pygame.Rect(self.x - self.width / 2, self.y - self.width / 2, self.width, self.width)
+        self.rect = pygame.Rect(self.x - 12, self.y - 12, self.width, self.width)
         self.dirx = 0
         self.diry = 0
         self.wait_time = 20
@@ -133,7 +151,7 @@ class Ghost():
         self.get_dirns()
         self.x += self.dirx
         self.y += self.diry
-        self.rect = pygame.Rect(self.x - self.width / 2, self.y - self.width / 2, self.width, self.width)
+        self.rect = pygame.Rect(self.x - 12, self.y - 12, self.width, self.width)
 
     def get_dirns(self):
         if self.x < self.boundaries["left"]:
