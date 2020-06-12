@@ -4,14 +4,14 @@ import pygame
 
 
 class Rectangle:
-    def __init__(self, x, y, width, is_moveable, has_dot, is_powerpellet):
+    def __init__(self, x, y, width, is_moveable, has_dot):
         self.x = x
         self.y = y
         self.width = width
         self.is_moveable = is_moveable
         self.eaten = not has_dot
-        self.is_powerpellet = is_powerpellet
-        self.dot_width = 4 if self.is_powerpellet else 2
+        self.is_powerpellet = True if self.y in (64, 384) and self.x in (16, 416) else False
+        self.dot_width = 6 if self.is_powerpellet else 2
         self.rect = pygame.Rect(self.x, self.y, self.width, self.width)
 
     def draw(self, win):

@@ -18,8 +18,8 @@ BG = pygame.transform.scale2x(pygame.image.load("bg.png"))
 CHERRY = pygame.transform.scale(pygame.image.load("cherry.png"), (24, 24))
 
 
-def get_movement():
-    with open("rect_movement.txt", newline="") as file:
+def get_rect_values(filename):
+    with open(filename, newline="") as file:
         lines = file.readlines()
         for x, line in enumerate(lines):
             numbers = line.rstrip().split(", ")
@@ -29,8 +29,9 @@ def get_movement():
     return lines
 
 
-moveables = get_movement()
-rects = [[Rectangle(i * 16, j * 16, 16, moveables[j][i], moveables[j][i], False) for i in range(28)] for j in range(32)]
+moveables = get_rect_values("rect_movement.txt")
+dots = get_rect_values("rect_dots.txt")
+rects = [[Rectangle(i * 16, j * 16, 16, moveables[j][i], dots[j][i]) for i in range(28)] for j in range(32)]
 
 cherry_list = random.choice(rects)
 cherry_pos = random.choice(cherry_list)
