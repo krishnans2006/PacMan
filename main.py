@@ -37,6 +37,8 @@ cherry_pos = random.choice(cherry_list)
 
 pacman_list = random.choice(rects)
 pacman_pos = random.choice(pacman_list)
+while not pacman_pos.is_moveable:
+    pacman_pos = random.choice(pacman_list)
 for i, rect_list in enumerate(rects):
     for j, rect in enumerate(rect_list):
         if rect == pacman_pos:
@@ -59,7 +61,7 @@ def redraw(win, rects, pacman, ghosts, cherry_disp):
     for ghost in ghosts.values():
         ghost.draw(win)
     if cherry_disp:
-        win.blit(CHERRY, (cherry_pos[0] - 12, cherry_pos[1] - 12))
+        win.blit(CHERRY, (cherry_pos.x, cherry_pos.y))
     pacman.draw(win)
     pygame.display.flip()
 

@@ -41,7 +41,7 @@ class PacMan:
         self.dirchange = 2
         self.dirx = 0
         self.diry = 0
-        self.sep = 2
+        self.sep = 3.5
         self.current_rect = self.collide(rects)
 
     def move(self, dirn, rects):
@@ -68,18 +68,19 @@ class PacMan:
 
     def check_move(self, dirn, rects):
         if dirn == "left":
-            point = (self.x - 12, self.y)
+            point = (self.x - 2, self.y)
         elif dirn == "right":
-            point = (self.x + 12, self.y)
+            point = (self.x + 2, self.y)
         elif dirn == "up":
-            point = (self.x, self.y - 12)
+            point = (self.x, self.y - 2)
         elif dirn == "down":
-            point = (self.x, self.y + 12)
+            point = (self.x, self.y + 2)
         else:
             return True
         for rect_list in rects:
             for rect_it in rect_list:
-                new_rect = pygame.Rect(rect_it.rect.left - self.sep, rect_it.rect.top - self.sep, rect_it.rect.width + 2 * self.sep, rect_it.rect.width + 2 * self.sep)
+                new_rect = pygame.Rect(rect_it.rect.left - 2 * self.sep, rect_it.rect.top - 2 * self.sep,
+                                       rect_it.rect.width + 4 * self.sep, rect_it.rect.width + 4 * self.sep)
                 if new_rect.collidepoint(*point) and not rect_it.is_moveable:
                     return False
         return True
