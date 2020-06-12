@@ -41,11 +41,11 @@ class PacMan:
         self.dirchange = 2
         self.dirx = 0
         self.diry = 0
-        self.sep = 9
+        self.sep = 2
         self.current_rect = self.collide(rects)
 
-    def move(self, dirn, walls):
-        if self.check_move(dirn, walls):
+    def move(self, dirn, rects):
+        if self.check_move(dirn, rects):
             if dirn == "left":
                 self.dirx = - self.dirchange
                 self.diry = 0
@@ -66,24 +66,26 @@ class PacMan:
                 self.dirx = 0
                 self.diry = 0
 
-    def check_move(self, dirn, walls):
+    def check_move(self, dirn, rects):
         if dirn == "left":
-            rect = pygame.Rect(self.x - 12 - self.sep, self.y - 12, 24, 24)
+            point = (self.x - 12, self.y)
         elif dirn == "right":
-            rect = pygame.Rect(self.x - 12 + self.sep, self.y - 12, 24, 24)
+            point = (self.x + 12, self.y)
         elif dirn == "up":
-            rect = pygame.Rect(self.x - 12, self.y - 12 - self.sep, 24, 24)
+            point = (self.x, self.y - 12)
         elif dirn == "down":
-            rect = pygame.Rect(self.x - 12, self.y - 12 + self.sep, 24, 24)
+            point = (self.x, self.y + 12)
         else:
             return True
-        for wall in walls:
-            if rect.colliderect(wall):
-                return False
+        for rect_list in rects:
+            for rect_it in rect_list:
+                new_rect = pygame.Rect(rect_it.rect.left - self.sep, rect_it.rect.top - self.sep, rect_it.rect.width + 2 * self.sep, rect_it.rect.width + 2 * self.sep)
+                if new_rect.collidepoint(*point) and not rect_it.is_moveable:
+                    return False
         return True
 
-    def update(self, W, H, rects, walls):
-        self.update_movement(W, H, walls)
+    def update(self, W, H, rects):
+        self.update_movement(W, H, rects)
         self.update_imgs()
         return self.collide(rects)
 
@@ -93,13 +95,13 @@ class PacMan:
             self.imgcnt = 0
         self.img = self.imgs[self.imgcnt // 4]
 
-    def update_movement(self, W, H, walls):
+    def update_movement(self, W, H, rects):
         self.count += 1
         if self.count % self.count_increment == 0:
-            if (self.dirx < 0 and self.check_move("left", walls)) or (
-                    self.dirx > 0 and self.check_move("right", walls)) or (
-                    self.diry < 0 and self.check_move("up", walls)) or (
-                    self.diry > 0 and self.check_move("down", walls)):
+            if (self.dirx < 0 and self.check_move("left", rects)) or (
+                    self.dirx > 0 and self.check_move("right", rects)) or (
+                    self.diry < 0 and self.check_move("up", rects)) or (
+                    self.diry > 0 and self.check_move("down", rects)):
                 self.x += self.dirx
                 self.y += self.diry
         if self.x > W:

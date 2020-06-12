@@ -18,20 +18,19 @@ BG = pygame.transform.scale2x(pygame.image.load("bg.png"))
 CHERRY = pygame.transform.scale(pygame.image.load("cherry.png"), (24, 24))
 
 
-def get_walls():
-    with open("walls.txt", newline="") as file:
+def get_movement():
+    with open("rect_movement.txt", newline="") as file:
         lines = file.readlines()
-        walls = []
-        for line in lines:
-            values = line.rstrip().split(", ")[:4]
-            for x, value in enumerate(values):
-                values[x] = int(value)
-            walls.append(pygame.Rect(*values))
-    return walls
+        for x, line in enumerate(lines):
+            numbers = line.rstrip().split(", ")
+            for y, number in enumerate(numbers):
+                numbers[y] = int(number)
+            lines[x] = numbers
+    return lines
 
 
-walls = get_walls()
-rects = [[Rectangle(i * 16, j * 16, 16, True, True, False) for i in range(28)] for j in range(32)]
+moveables = get_movement()
+rects = [[Rectangle(i * 16, j * 16, 16, moveables[j][i], moveables[j][i], False) for i in range(28)] for j in range(32)]
 
 cherry_list = random.choice(rects)
 cherry_pos = random.choice(cherry_list)
@@ -61,8 +60,6 @@ def redraw(win, rects, pacman, ghosts, cherry_disp):
         ghost.draw(win)
     if cherry_disp:
         win.blit(CHERRY, (cherry_pos[0] - 12, cherry_pos[1] - 12))
-    for wall in walls:
-        pygame.draw.rect(win, (0, 255, 0), wall, 1)
     pacman.draw(win)
     pygame.display.flip()
 
@@ -77,7 +74,7 @@ def main():
     }
     while True:
         cherry_disp = check_rect_values(rects)
-        collide_rect = pacman.update(W, H, [cherry_pos], walls) if cherry_disp else pacman.update(W, H, rects, walls)
+        collide_rect = pacman.update(W, H, [[cherry_pos]]) if cherry_disp else pacman.update(W, H, rects)
         for i, rect_list in enumerate(rects):
             for j, rect in enumerate(rect_list):
                 if collide_rect and rect == collide_rect:
@@ -90,13 +87,13 @@ def main():
                 quit()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            pacman.move("left", walls)
+            pacman.move("left", rects)
         if keys[pygame.K_RIGHT]:
-            pacman.move("right", walls)
+            pacman.move("right", rects)
         if keys[pygame.K_UP]:
-            pacman.move("up", walls)
+            pacman.move("up", rects)
         if keys[pygame.K_DOWN]:
-            pacman.move("down", walls)
+            pacman.move("down", rects)
         for ghost in ghosts.values():
             ghost.move()
         redraw(win, rects, pacman, ghosts, cherry_disp)
