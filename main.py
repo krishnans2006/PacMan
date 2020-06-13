@@ -40,6 +40,8 @@ pacman_list = random.choice(rects)
 pacman_pos = random.choice(pacman_list)
 while not pacman_pos.is_moveable:
     pacman_pos = random.choice(pacman_list)
+
+
 for i, rect_list in enumerate(rects):
     for j, rect in enumerate(rect_list):
         if rect == pacman_pos:
@@ -70,14 +72,14 @@ def redraw(win, rects, pacman, ghosts, cherry_disp):
 def main():
     pacman = PacMan(pacman_pos.x + 8, pacman_pos.y + 8, rects)
     ghosts = {
-        "blinky": Blinky(176, 247, 24),
-        "inky": Inky(200, 247, 24),
-        "pinky": Pinky(224, 247, 24),
-        "clyde": Clyde(248, 247, 24)
+        "blinky": Blinky(188, 259, 24),
+        "inky": Inky(212, 259, 24),
+        "pinky": Pinky(236, 259, 24),
+        "clyde": Clyde(260, 259, 24)
     }
     while True:
         cherry_disp = check_rect_values(rects)
-        collide_rect = pacman.update(W, H, [[cherry_pos]]) if cherry_disp else pacman.update(W, H, rects)
+        collide_rect = pacman.update(W, H, rects.append([[cherry_pos]])) if cherry_disp else pacman.update(W, H, rects)
         for i, rect_list in enumerate(rects):
             for j, rect in enumerate(rect_list):
                 if collide_rect and rect == collide_rect:
@@ -98,7 +100,8 @@ def main():
         if keys[pygame.K_DOWN]:
             pacman.move("down", rects)
         for ghost in ghosts.values():
-            ghost.move()
+            if ghost.move(W, H, rects, pacman, ghosts["blinky"]):
+                return False
         redraw(win, rects, pacman, ghosts, cherry_disp)
         pygame.display.flip()
         clock.tick(30)
@@ -107,3 +110,5 @@ def main():
 if __name__ == '__main__':
     if main():
         print("You win!")
+    else:
+        print("You lose!")
