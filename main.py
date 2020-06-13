@@ -13,6 +13,7 @@ win = pygame.display.set_mode((W, H))
 pygame.display.set_caption("PacMan")
 pygame.display.set_icon(pygame.image.load("pacman1.png"))
 clock = pygame.time.Clock()
+font = pygame.font.SysFont("banger", 30, True)
 
 BG = pygame.transform.scale2x(pygame.image.load("bg.png"))
 CHERRY = pygame.transform.scale(pygame.image.load("cherry.png"), (24, 24))
@@ -41,6 +42,13 @@ pacman_pos = random.choice(pacman_list)
 while not pacman_pos.is_moveable:
     pacman_pos = random.choice(pacman_list)
 
+pacman = PacMan(pacman_pos.x + 8, pacman_pos.y + 8, rects)
+ghosts = {
+    "blinky": Blinky(188, 259, 24),
+    "inky": Inky(212, 259, 24),
+    "pinky": Pinky(236, 259, 24),
+    "clyde": Clyde(260, 259, 24)
+}
 
 for i, rect_list in enumerate(rects):
     for j, rect in enumerate(rect_list):
@@ -69,14 +77,36 @@ def redraw(win, rects, pacman, ghosts, cherry_disp):
     pygame.display.flip()
 
 
+def start_screen():
+    redraw(win, rects, pacman, ghosts, None)
+    text = font.render("READY!", 1, (255, 0, 0))
+    win.blit(text, (W // 2 - text.get_width() // 2, 288))
+    pygame.display.flip()
+    for i in range(150):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        clock.tick(30)
+
+
+def end_screen(is_win):
+    redraw(win, rects, pacman, ghosts, None)
+    if is_win:
+        text = font.render("YOU WIN!", 1, (255, 0, 0))
+    else:
+        text = font.render("YOU LOSE!", 1, (255, 0, 0))
+    win.blit(text, (W // 2 - text.get_width() // 2, 288))
+    pygame.display.flip()
+    for i in range(150):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        clock.tick(30)
+
+
 def main():
-    pacman = PacMan(pacman_pos.x + 8, pacman_pos.y + 8, rects)
-    ghosts = {
-        "blinky": Blinky(188, 259, 24),
-        "inky": Inky(212, 259, 24),
-        "pinky": Pinky(236, 259, 24),
-        "clyde": Clyde(260, 259, 24)
-    }
     while True:
         cherry_disp = check_rect_values(rects)
         collide_rect = pacman.update(W, H, rects.append([[cherry_pos]])) if cherry_disp else pacman.update(W, H, rects)
@@ -103,12 +133,12 @@ def main():
             if ghost.move(W, H, rects, pacman, ghosts["blinky"]):
                 return False
         redraw(win, rects, pacman, ghosts, cherry_disp)
-        pygame.display.flip()
         clock.tick(30)
 
 
 if __name__ == '__main__':
+    start_screen()
     if main():
-        print("You win!")
+        end_screen(True)
     else:
-        print("You lose!")
+        end_screen(False)
