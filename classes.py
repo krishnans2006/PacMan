@@ -1,6 +1,6 @@
+import math
 from datetime import datetime
 
-import math
 import pygame
 
 
@@ -421,9 +421,9 @@ class Clyde(Ghost):
         self.img = self.imgs[1]
         self.dirx = -1
 
-    def get_dirns(self, rects, pacman):
+    def get_dirns(self, rects, pacman, blinky):
         if self.use_super:
-            self.use_super = super().get_dirns(rects, pacman)
+            self.use_super = super().get_dirns(rects, pacman, blinky)
         else:
             dirns = self.get_list_of_dirns(rects)
             distances = {}
