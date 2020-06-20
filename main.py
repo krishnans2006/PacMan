@@ -138,7 +138,4 @@ def main():
 
 if __name__ == '__main__':
     start_screen()
-    if main():
-        end_screen(True)
-    else:
-        end_screen(False)
+    end_screen(main())
